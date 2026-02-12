@@ -55,9 +55,3 @@ mpcl.show_boxes(X_train, y_train)
 
 * **Marcos Eduardo Valle** - University of Campinas (UNICAMP).
 * **Iara Cunha** - Universidade Tecnológica Federal do Paraná (UTFPR).
-
-
-
-## License
-
-*Recommended License: **Apache License 2.0** or **MIT License**.*
