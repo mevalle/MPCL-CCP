@@ -125,21 +125,23 @@ def tf_dHpC(n=None, M=0.0):
 
 def kmeans_pp(K,random_state=42):
   def aux(X):
-    if K > X.shape[0]:
+    K_aux = K
+    if K_aux > X.shape[0]:
       print('The number of hyperboxes must be less than or equal to the number of samples!')
       print('Setting K to %d, the number of samples.' % X.shape[0])      
-      K = X.shape[0]
-    BBpx, inds = kmeans_plusplus(X,K,random_state=random_state)
+      K_aux = X.shape[0]
+    BBpx, inds = kmeans_plusplus(X,K_aux,random_state=random_state)
     return np.array([np.hstack([a,-a]) for a in BBpx])
   return aux
 
 def tf_kmeans_pp(K,random_state=42):
   def aux(X):
-    if K > X.shape[0]:
+    K_aux = K
+    if K_aux > X.shape[0]:
       print('The number of hyperboxes must be less than or equal to the number of samples!')
       print('Setting K to %d, the number of samples.' % X.shape[0])      
-      K = X.shape[0]
-    BBpx, inds =kmeans_plusplus(X,K,random_state=random_state)
+      K_aux = X.shape[0]
+    BBpx, inds =kmeans_plusplus(X,K_aux,random_state=random_state)
     return tf.concat([np.hstack([a,-a]).reshape(1,-1) for a in BBpx],axis=0)
   return aux
 
