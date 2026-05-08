@@ -97,6 +97,7 @@ def dHpC(M=0.0,n=None):
         n_aux = n
         if n_aux is None:
           n_aux = X.shape[1]
+        n_aux = min(n_aux, X.shape[1])
             
         w_init, b_init = generate_wb(X, M)
         w_div, b_div = dividing_hb(w_init, b_init, n_aux)
@@ -114,6 +115,7 @@ def tf_dHpC(n=None, M=0.0):
         n_aux = n
         if n_aux is None:
           n_aux = X.shape[1]
+        n_aux = min(n_aux, X.shape[1])
             
         w_init, b_init = generate_wb(X, M)
         w_div, b_div = dividing_hb(w_init, b_init, n_aux)
@@ -416,9 +418,10 @@ def get_inside(X, y, w):
 
 class MPCL_Greedy(BaseEstimator, ClassifierMixin):
     
-    def __init__(self, verbose = False, myInf = 1.e+10):
+    def __init__(self, verbose = False, myInf = 1.e+10, K=None):
         self.verbose = verbose
-        self.myInf = 1.e+10 
+        self.myInf = 1.e+10
+        self.K = K
     
     def fit(self, Xtr, ytr):
         self.Nclasses_ = np.size(np.unique(ytr))
@@ -433,6 +436,7 @@ class MPCL_Greedy(BaseEstimator, ClassifierMixin):
         
         for label in self.classes_:
             self.fit_class(Xtr, ytr, label)
+        self.K = np.array([len(w) for w in self.boxes_])
         return self
 
     def fit_class(self, Xtr, ytr, label):
