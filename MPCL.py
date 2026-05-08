@@ -127,8 +127,8 @@ def kmeans_pp(K,random_state=42):
   def aux(X):
     K_aux = K
     if K_aux > X.shape[0]:
-      print('The number of hyperboxes must be less than or equal to the number of samples!')
-      print('Setting K to %d, the number of samples.' % X.shape[0])      
+    #   print('The number of hyperboxes must be less than or equal to the number of samples!')
+    #   print('Setting K to %d, the number of samples.' % X.shape[0])      
       K_aux = X.shape[0]
     BBpx, inds = kmeans_plusplus(X,K_aux,random_state=random_state)
     return np.array([np.hstack([a,-a]) for a in BBpx])
@@ -138,8 +138,8 @@ def tf_kmeans_pp(K,random_state=42):
   def aux(X):
     K_aux = K
     if K_aux > X.shape[0]:
-      print('The number of hyperboxes must be less than or equal to the number of samples!')
-      print('Setting K to %d, the number of samples.' % X.shape[0])      
+    #   print('The number of hyperboxes must be less than or equal to the number of samples!')
+    #   print('Setting K to %d, the number of samples.' % X.shape[0])      
       K_aux = X.shape[0]
     BBpx, inds =kmeans_plusplus(X,K_aux,random_state=random_state)
     return tf.concat([np.hstack([a,-a]).reshape(1,-1) for a in BBpx],axis=0)
@@ -319,11 +319,11 @@ class MPCL_CCP(BaseEstimator, ClassifierMixin):
                 if self.verbose == True:
                     print("Initializing the boxes with dHpC.")
                 W = dHpC(n=self.n, M=self.M)(X[ind1])
-                self.K = W.shape[0]
             else:
                 if self.verbose == True:
                     print("Initializing the boxes with kmeans++.")
                 W = kmeans_pp(self.K, random_state=self.random_state)(X[ind1])
+            self.K = W.shape[0]
 
         # Compute the initial objective value
         xi0 = np.maximum(0,np.max(np.vstack([np.min(Z0 - np.tile(w,(Z0.shape[0],1)),axis=1) for w in W]),axis=0))
@@ -561,11 +561,11 @@ class MPCL_Adam(BaseEstimator, ClassifierMixin):
                     if self.verbose == True:
                         print("Initializing the boxes with dHpC.")
                     W = tf_dHpC(n=self.n, M=self.M)(Xtr[ind1])
-                    self.K = W.shape[0]
                 else:
                     if self.verbose == True:
                         print("Initializing the boxes with kmeans++.")
                     W = tf_kmeans_pp(self.K, random_state=self.random_state)(Xtr[ind1])
+                self.K = W.shape[0]
 
             # Create the MPCL module for the class and set the initial weights
             mod = MPCL_Module(K=self.K)
